@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 public class Wallet implements Convertable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long walletId;
     private String walletName;
     private Integer balance;
     private LocalDateTime createdAt;

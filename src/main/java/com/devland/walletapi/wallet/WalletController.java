@@ -35,7 +35,7 @@ public class WalletController {
     public ResponseEntity<WalletResponseDTO> createWallet(@RequestBody WalletRequestDTO walletRequestDTO){
         Wallet newWallet = Wallet.builder().walletName(walletRequestDTO.getWalletName()).build();
         Wallet saveWallet = this.walletService.createWallet(newWallet);
-        WalletResponseDTO walletResponseDTO = WalletResponseDTO.builder().id(saveWallet.getId()).walletName(saveWallet.getWalletName())
+        WalletResponseDTO walletResponseDTO = WalletResponseDTO.builder().id(saveWallet.getWalletId()).walletName(saveWallet.getWalletName())
                                               .createdAt(saveWallet.getCreatedAt()).balance(saveWallet.getBalance()).build();
         
         return ResponseEntity.status(HttpStatus.CREATED).body(walletResponseDTO);

@@ -3,9 +3,12 @@ package com.devland.walletapi.customer;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.devland.walletapi.transaction.TransactionHistoryRequestTransferDTO;
+import com.devland.walletapi.transaction.TransactionHistoryService;
 import com.devland.walletapi.wallet.Wallet;
 import com.devland.walletapi.wallet.WalletRequestDTO;
 import com.devland.walletapi.wallet.WalletResponseDTO;
+import com.devland.walletapi.wallet.WalletService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private TransactionHistoryService transactionHistoryService;
+
+    @Autowired
+    private WalletService walletService;
     
     @Autowired
     private ModelMapper modelMapper;
@@ -47,19 +56,40 @@ public class CustomerController {
         Customer newCustomer = Customer.builder().firstName(customerRequestDTO.getFirstName()).lastName(customerRequestDTO.getLastName())
                                .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).createdAt(customerRequestDTO.getCreatedAt()).build();
         Customer saveCustomer = this.customerService.createCustomer(newCustomer);
-        this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").build());
+        Wallet newWallet = this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").balance(50000).build());
+        this.transactionHistoryService.createWalletOpeningTransactionHistory(newWallet);
+        Wallet updateWallet = this.walletService.findById(newWallet.getWalletId());
+        List<Wallet> updateWalletList = List.of(updateWallet);
         CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder().id(saveCustomer.getId()).firstName(saveCustomer.getFirstName()).lastName(saveCustomer.getLastName())
-                                                  .dateOfBirth(saveCustomer.getDateOfBirth()).nik(saveCustomer.getNik()).createdAt(saveCustomer.getCreatedAt()).walletList(saveCustomer.getWalletList()).build();
+                                                  .dateOfBirth(saveCustomer.getDateOfBirth()).nik(saveCustomer.getNik()).createdAt(saveCustomer.getCreatedAt())
+                                                  .walletList(updateWalletList).build();
         
         return ResponseEntity.status(HttpStatus.CREATED).body(customerResponseDTO);
     }
 
     @PostMapping("/customers/{customerId}/add-wallet")
     public ResponseEntity<WalletResponseDTO> createCustomerWallet(@PathVariable("customerId") Long customerId,@RequestBody WalletRequestDTO walletRequestDTO){
-        Wallet wallet= this.customerService.createCustomerWallet(customerId, walletRequestDTO);
-        WalletResponseDTO walletResponseDTO = WalletResponseDTO.builder().id(wallet.getId()).walletName(wallet.getWalletName()).balance(wallet.getBalance())
+        Wallet wallet = this.customerService.createCustomerWallet(customerId, walletRequestDTO);
+        this.transactionHistoryService.createWalletOpeningTransactionHistory(wallet);
+        WalletResponseDTO walletResponseDTO = WalletResponseDTO.builder().id(wallet.getWalletId()).walletName(wallet.getWalletName()).balance(wallet.getBalance())
                                                                          .createdAt(wallet.getCreatedAt()).build();
         
         return ResponseEntity.status(HttpStatus.CREATED).body(walletResponseDTO);
     }
+
+    @PostMapping("/customers/{customerId}/top-up")
+    public ResponseEntity<Void> topUpWallet(@PathVariable("customerId") Long customerId,@RequestBody TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
+        Wallet wallet= this.walletService.findById(transactionHistoryRequestDTO.getToWalletId());
+        this.transactionHistoryService.createTopUpTransactionHistory(wallet.getWalletId(), transactionHistoryRequestDTO);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    // @PostMapping("/customers/{customerId}/transfer/{walletId}")
+    // public ResponseEntity<Void> topUpWallet(@PathVariable("customerId") Long customerId,@RequestBody TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
+    //     Wallet wallet= this.walletService.findById(transactionHistoryRequestDTO.getToWalletId());
+    //     this.transactionHistoryService.createTopUpTransactionHistory(wallet.getWalletId(), transactionHistoryRequestDTO);
+        
+    //     return ResponseEntity.status(HttpStatus.CREATED).build();
+    // }
 }

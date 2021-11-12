@@ -13,4 +13,5 @@ import lombok.Setter;
 @Builder
 public class WalletRequestDTO {
     private String walletName;
+    private Integer balance;
 }

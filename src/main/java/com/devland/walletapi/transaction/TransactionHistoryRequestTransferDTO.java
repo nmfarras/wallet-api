@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionRequestDTO {
-    private Long walletId;
+public class TransactionHistoryRequestTransferDTO {
+    private Long toWalletId;
     private Integer amount;
+    private String note;
 }
