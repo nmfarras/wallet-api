@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import com.devland.walletapi.wallet.Wallet;
 import com.devland.walletapi.wallet.WalletRequestDTO;
 import com.devland.walletapi.wallet.WalletResponseDTO;
-import com.devland.walletapi.wallet.WalletService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,23 +43,21 @@ public class CustomerController {
     }
     
     @PostMapping("/customers")
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO){
-        Customer newCustomer = new Customer();
-        newCustomer.setFirstName(customerRequestDTO.getFirstName());
-        newCustomer.setLastName(customerRequestDTO.getLastName());
-        newCustomer.setDateOfBirth(customerRequestDTO.getDateOfBirth());
-        newCustomer.setNik(customerRequestDTO.getNik());
-
+    public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO){
+        Customer newCustomer = Customer.builder().firstName(customerRequestDTO.getFirstName()).lastName(customerRequestDTO.getLastName())
+                               .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).build();
         Customer saveCustomer = this.customerService.createCustomer(newCustomer);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(saveCustomer);
+        this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").build());
+        CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder().id(saveCustomer.getId()).firstName(saveCustomer.getFirstName()).lastName(saveCustomer.getLastName())
+                                                  .dateOfBirth(saveCustomer.getDateOfBirth()).nik(saveCustomer.getNik()).createdAt(saveCustomer.getCreatedAt()).walletList(saveCustomer.getWalletList()).build();
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerResponseDTO);
     }
 
     @PostMapping("/customers/{customerId}/add-wallet")
     public ResponseEntity<WalletResponseDTO> createCustomerWallet(@PathVariable("customerId") Long customerId,@RequestBody WalletRequestDTO walletRequestDTO){
         Wallet wallet= this.customerService.createCustomerWallet(customerId, walletRequestDTO);
         WalletResponseDTO walletResponseDTO = WalletResponseDTO.builder().id(wallet.getId()).walletName(wallet.getWalletName()).balance(wallet.getBalance())
-                                                                         .customerName(wallet.getCustomer().getFirstName()+wallet.getCustomer().getLastName())
                                                                          .createdAt(wallet.getCreatedAt()).build();
         
         return ResponseEntity.status(HttpStatus.CREATED).body(walletResponseDTO);

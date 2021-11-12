@@ -16,7 +16,6 @@ import lombok.Setter;
 public class WalletResponseDTO {
     private long id;
     private String walletName;
-    private String customerName;
     private Integer balance;
     private LocalDateTime createdAt;
 }

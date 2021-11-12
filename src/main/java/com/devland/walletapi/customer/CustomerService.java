@@ -23,7 +23,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    private Customer findById(Long id) {
+    public Customer findById(Long id) {
         Optional<Customer> existingCustomer = this.customerRepository.findById(id);
 
         if(existingCustomer.isEmpty()) {

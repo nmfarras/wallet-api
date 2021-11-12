@@ -43,6 +43,9 @@ public class WalletService {
     public Wallet createWallet(Wallet wallet) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         wallet.setCreatedAt(currentDateTime);
+        this.walletRepository.save(wallet);
+        topUp(wallet.getId(), 50000);
+        
         return this.walletRepository.save(wallet);
     }
 
