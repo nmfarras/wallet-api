@@ -1,17 +1,22 @@
 package com.devland.walletapi.transaction;
 
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime;
+// import java.util.List;
 
 import javax.persistence.Entity;
+// import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 // import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+// import javax.persistence.OneToMany;
 
 // import com.devland.walletapi.customer.Customer;
 import com.devland.walletapi.wallet.Wallet;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.springframework.lang.Nullable;
 
@@ -19,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+// import net.bytebuddy.dynamic.TypeResolutionStrategy.Lazy;
 
 @Data
 @AllArgsConstructor
@@ -29,18 +35,15 @@ public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String transactionType;
-    private String note;
 
     @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "wallet_id")
     @Nullable
-    private Wallet walletFrom;
+    private Wallet wallet;
 
     @JsonBackReference
     @ManyToOne
-    private Wallet walletTo;
-
-    private Integer amount;
-    private LocalDateTime createdAt;
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
 }

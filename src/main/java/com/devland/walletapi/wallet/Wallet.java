@@ -44,10 +44,14 @@ public class Wallet implements Convertable{
     private Customer customer;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "walletFrom",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<TransactionHistory> transactionFrom;
+    @OneToMany(mappedBy = "wallet",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<TransactionHistory> transactionHistories;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "walletTo",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<TransactionHistory> transactionTo;
+    // @JsonManagedReference
+    // @OneToMany(mappedBy = "walletFrom",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // private List<TransactionHistory> transactionFrom;
+
+    // @JsonManagedReference
+    // @OneToMany(mappedBy = "walletTo",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    // private List<TransactionHistory> transactionTo;
 }

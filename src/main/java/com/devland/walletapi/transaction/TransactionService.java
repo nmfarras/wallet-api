@@ -15,9 +15,17 @@ public class TransactionService {
     @Autowired
     WalletRepository walletRepository;
     
-    public Wallet topUp(Long walletId, int balance) {
+    public Wallet topUp(Long walletId, int amount) {
         Wallet wallet = this.walletService.findById(walletId);
-        Integer updateBalance = wallet.getBalance()+balance;
+        Integer updateBalance = wallet.getBalance()+amount;
+        wallet.setBalance(updateBalance);
+
+        return this.walletRepository.save(wallet);
+    }
+
+    public Wallet transfer(Long walletId, int amount) {
+        Wallet wallet = this.walletService.findById(walletId);
+        Integer updateBalance = wallet.getBalance()-amount;
         wallet.setBalance(updateBalance);
 
         return this.walletRepository.save(wallet);
