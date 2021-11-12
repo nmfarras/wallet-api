@@ -2,10 +2,13 @@ package com.devland.walletapi.customer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.devland.walletapi.wallet.Wallet;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +28,5 @@ public class CustomerResponseDTO {
     private Long nik;
     private LocalDate dateOfBirth;
     private LocalDateTime createdAt;
+    private List<Wallet> walletList;
 }
