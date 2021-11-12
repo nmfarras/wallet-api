@@ -2,6 +2,7 @@ package com.devland.walletapi.customer;
 
 import java.time.LocalDate;
 // import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,4 +25,5 @@ public class CustomerRequestDTO {
     private String lastName;
     private Long nik;
     private LocalDate dateOfBirth;
+    private LocalDateTime createdAt;
 }

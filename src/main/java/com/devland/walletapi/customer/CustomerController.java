@@ -45,7 +45,7 @@ public class CustomerController {
     @PostMapping("/customers")
     public ResponseEntity<CustomerResponseDTO> createCustomer(@RequestBody CustomerRequestDTO customerRequestDTO){
         Customer newCustomer = Customer.builder().firstName(customerRequestDTO.getFirstName()).lastName(customerRequestDTO.getLastName())
-                               .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).build();
+                               .dateOfBirth(customerRequestDTO.getDateOfBirth()).nik(customerRequestDTO.getNik()).createdAt(customerRequestDTO.getCreatedAt()).build();
         Customer saveCustomer = this.customerService.createCustomer(newCustomer);
         this.customerService.createCustomerWallet(saveCustomer.getId(), WalletRequestDTO.builder().walletName("Main").build());
         CustomerResponseDTO customerResponseDTO = CustomerResponseDTO.builder().id(saveCustomer.getId()).firstName(saveCustomer.getFirstName()).lastName(saveCustomer.getLastName())

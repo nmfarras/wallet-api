@@ -1,4 +1,4 @@
-package com.devland.walletapi.transactionHistory;
+package com.devland.walletapi.transaction;
 
 import java.time.LocalDateTime;
 
@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+// import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 // import com.devland.walletapi.customer.Customer;
@@ -34,10 +34,12 @@ public class TransactionHistory {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "wallet_id")
     @Nullable
-    private Wallet fromWallet;
-    // private Wallet toWallet;
+    private Wallet walletFrom;
+
+    @JsonBackReference
+    @ManyToOne
+    private Wallet walletTo;
 
     private Integer amount;
     private LocalDateTime createdAt;

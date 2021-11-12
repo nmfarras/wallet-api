@@ -34,8 +34,7 @@ public class WalletService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         customerWallet.setCreatedAt(currentDateTime);
         customerWallet.setCustomer(customer);
-        this.walletRepository.save(customerWallet);
-        topUp(customerWallet.getId(), 50000);
+        customerWallet.setBalance(50000);
 
         return this.walletRepository.save(customerWallet);
     }
@@ -43,14 +42,8 @@ public class WalletService {
     public Wallet createWallet(Wallet wallet) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         wallet.setCreatedAt(currentDateTime);
-        this.walletRepository.save(wallet);
-        topUp(wallet.getId(), 50000);
-        
-        return this.walletRepository.save(wallet);
-    }
+        wallet.setBalance(50000);
 
-    public void topUp(Long walletId, int balance) {
-        Wallet wallet = findById(walletId);
-        wallet.setBalance(balance);;
+        return this.walletRepository.save(wallet);
     }
 }
