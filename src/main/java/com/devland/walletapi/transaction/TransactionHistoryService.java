@@ -37,4 +37,14 @@ public class TransactionHistoryService {
         this.transactionService.topUp(toWalletId, transactionHistoryRequestDTO.getAmount());
         return this.transactionHistoryRepository.save(newTransactionHistory);
     }
+
+    public TransactionHistory createTransferTransactionHistory(Long fromWalletId,TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
+        Wallet walletFrom = this.walletService.findById(fromWalletId);
+        Wallet walletTo = this.walletService.findById(transactionHistoryRequestDTO.getToWalletId());
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        TransactionHistory newTransactionHistory = TransactionHistory.builder().note(transactionHistoryRequestDTO.getNote()).transactionType("Transfer")
+                                                   .walletFrom(walletFrom).walletTo(walletTo).amount(transactionHistoryRequestDTO.getAmount()).createdAt(currentDateTime).build();
+        this.transactionService.transfer(fromWalletId, transactionHistoryRequestDTO.getToWalletId(), transactionHistoryRequestDTO.getAmount());
+        return this.transactionHistoryRepository.save(newTransactionHistory);
+    }
 }

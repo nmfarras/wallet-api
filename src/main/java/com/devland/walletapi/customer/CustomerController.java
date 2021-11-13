@@ -85,11 +85,10 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // @PostMapping("/customers/{customerId}/transfer/{walletId}")
-    // public ResponseEntity<Void> topUpWallet(@PathVariable("customerId") Long customerId,@RequestBody TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
-    //     Wallet wallet= this.walletService.findById(transactionHistoryRequestDTO.getToWalletId());
-    //     this.transactionHistoryService.createTopUpTransactionHistory(wallet.getWalletId(), transactionHistoryRequestDTO);
+    @PostMapping("/customers/{customerId}/transfer/{walletId}")
+    public ResponseEntity<Void> tansferWallet(@PathVariable("customerId") Long customerId, @PathVariable("walletId") Long fromWalletId, @RequestBody TransactionHistoryRequestTransferDTO transactionHistoryRequestDTO){
+        this.transactionHistoryService.createTransferTransactionHistory(fromWalletId, transactionHistoryRequestDTO);
         
-    //     return ResponseEntity.status(HttpStatus.CREATED).build();
-    // }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }

@@ -27,4 +27,21 @@ public class TransactionService {
 
         return this.walletRepository.save(wallet);
     }
+
+    public Wallet transfer(Long walletFromId, Long walletToId, Integer amount) {
+        Wallet walletFrom = this.walletService.findById(walletFromId);
+        Integer updateBalance;
+
+        if (walletFrom.getBalance()==null) {
+            throw new TransactionBalanceNotSufficeException();
+        } 
+        if (walletFrom.getBalance()<amount) {
+            throw new TransactionBalanceNotSufficeException();
+        } else{
+            updateBalance = walletFrom.getBalance()-amount;
+        }
+        walletFrom.setBalance(updateBalance);
+        topUp(walletToId, amount);
+        return this.walletRepository.save(walletFrom);
+    }
 }
