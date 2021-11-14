@@ -1,6 +1,7 @@
 package com.devland.walletapi.transaction;
 
 import com.devland.walletapi.wallet.Wallet;
+import com.devland.walletapi.wallet.WalletNotFoundException;
 import com.devland.walletapi.wallet.WalletRepository;
 import com.devland.walletapi.wallet.WalletService;
 
@@ -32,6 +33,9 @@ public class TransactionService {
         Wallet walletFrom = this.walletService.findById(walletFromId);
         Integer updateBalance;
 
+        if (this.walletRepository.findById(walletToId).isEmpty()){
+            throw new WalletNotFoundException();
+        }
         if (walletFrom.getBalance()==null) {
             throw new TransactionBalanceNotSufficeException();
         } 
