@@ -38,6 +38,6 @@ public class Customer implements Convertable{
     private LocalDateTime createdAt;
     
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wallet> walletList;
 }

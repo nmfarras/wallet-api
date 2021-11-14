@@ -17,8 +17,10 @@ import javax.persistence.OneToMany;
 import com.devland.walletapi.customer.Customer;
 import com.devland.walletapi.transaction.TransactionHistory;
 import com.devland.walletapi.utils.Convertable;
+// import com.devland.walletapi.utils.WalletSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+// import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,10 +46,10 @@ public class Wallet implements Convertable{
     private Customer customer;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "walletFrom",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "walletFrom",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TransactionHistory> transactionFrom;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "walletTo",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "walletTo",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TransactionHistory> transactionTo;
 }
