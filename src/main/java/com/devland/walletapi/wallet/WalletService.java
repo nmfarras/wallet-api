@@ -18,6 +18,10 @@ public class WalletService {
         return this.walletRepository.findAll();
     }
 
+    public List<Wallet> getWalletsByCustomer(Customer customer) {
+        return this.walletRepository.findByCustomer(customer);
+    }
+
     public Wallet findById(Long walletId) {
         Optional<Wallet> wallet = this.walletRepository.findById(walletId);
 

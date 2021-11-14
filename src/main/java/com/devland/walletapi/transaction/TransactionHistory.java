@@ -9,6 +9,7 @@ import javax.persistence.Id;
 // import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.devland.walletapi.utils.Convertable;
 // import com.devland.walletapi.customer.Customer;
 import com.devland.walletapi.wallet.Wallet;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-public class TransactionHistory {
+public class TransactionHistory implements Convertable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
